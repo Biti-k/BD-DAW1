@@ -297,3 +297,35 @@ begin
     || v_comanda.data_tramesa || ' ' || v_comanda.com_tipus || ' ' || v_comanda.total);
   end loop;
 end;
+
+--documento D, ejercicio 17
+/* Creeu un programa que mostri un llistat de totes les comandes
+ i els seus detalls, de forma
+que obtinguem una sortida similar a: */
+declare
+cursor c_detall(comanda detall.com_num%type) is select * from detall
+  where com_num = comanda;
+    v_client client.nom%type;
+    v_total float := 0;
+cursor c_comanda is select * from comanda;
+begin
+  for v_comanda in c_comanda loop
+
+      dbms_output.put_line('Comanda num. ' || v_comanda.com_num ||
+      ' ' || v_comanda.data_tramesa);
+
+    select nom into v_client from client
+    where client_cod = v_comanda.client_cod;
+    for v_detall in c_detall(v_comanda.com_num) loop
+
+
+      dbms_output.put_line('....' || v_detall.detall_num || 
+      ' : ' || v_client ||' u: ' || v_detall.quantitat || '* ' || 
+      v_detall.preu_venda || ' = ' || v_detall.quantitat * v_detall.preu_venda);
+      v_total := v_total + v_detall.quantitat * v_detall.preu_venda;
+    end loop;
+      dbms_output.put_line('=================TOTAL: ' || v_total || '€');
+      v_total := 0;
+  end loop;
+
+end;
