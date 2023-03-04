@@ -278,10 +278,22 @@ begin
 end;
 
 --documento D, ejercicio 15
+/* Feu un programa que llisti totes les comandes d’un client donat. 
+El codi del
+client serà subministrat mitjançant una variable de substitució. 
+El recorregut es farà usant
+un cursor parametritzat.
+Mostrar el número de comanda, la data, el tipus de comanda, 
+la data de tramesa i el total. */
 
-accept 
+ACCEPT s_client PROMPT 'Introd. client per veure les seves comandes '
 declare
-
+  v_client emp.emp_no%type := &s_client;
+  cursor c_comanda (client comanda.client_cod%type) is select * from comanda
+  where client_cod = client;
 begin
-  
+  for v_comanda in c_comanda (v_client) loop
+    dbms_output.put_line('N_comanda ' || v_comanda.com_num || ' '
+    || v_comanda.data_tramesa || ' ' || v_comanda.com_tipus || ' ' || v_comanda.total);
+  end loop;
 end;
