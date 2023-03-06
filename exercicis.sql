@@ -206,7 +206,6 @@ Comanda numero --&gt; 605 data de la comanda --&gt; 14/07/86
 total de la comanda --&gt; 8324
 i té 6 linies de detall i representa 8,04 % del total
 ----------------------------------
-
 M02 BASES DE DADES Grup 1r ICC0/ICB0
 UF3 Extensió procedimental PL/SQL Data: Març 2019
 C Exercicis Pàgines 3 / 3
