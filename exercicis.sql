@@ -304,8 +304,8 @@ que obtinguem una sortida similar a: */
 declare
 cursor c_detall(comanda detall.com_num%type) is select * from detall
   where com_num = comanda;
-    v_client client.nom%type;
     v_total float := 0;
+    v_descripcio producte.descripcio%type;
 cursor c_comanda is select * from comanda;
 begin
   for v_comanda in c_comanda loop
@@ -313,13 +313,12 @@ begin
       dbms_output.put_line('Comanda num. ' || v_comanda.com_num ||
       ' ' || v_comanda.data_tramesa);
 
-    select nom into v_client from client
-    where client_cod = v_comanda.client_cod;
     for v_detall in c_detall(v_comanda.com_num) loop
-
+      select descripcio into v_descripcio from producte
+      where prod_num = v_detall.prod_num;
 
       dbms_output.put_line('....' || v_detall.detall_num || 
-      ' : ' || v_client ||' u: ' || v_detall.quantitat || '* ' || 
+      ' : ' || v_descripcio ||' u: ' || v_detall.quantitat || '* ' || 
       v_detall.preu_venda || ' = ' || v_detall.quantitat * v_detall.preu_venda);
       v_total := v_total + v_detall.quantitat * v_detall.preu_venda;
     end loop;
