@@ -325,5 +325,26 @@ begin
       dbms_output.put_line('=================TOTAL: ' || v_total || '€');
       v_total := 0;
   end loop;
+end;
 
+--EX 18 (documento D)
+/* 18. (CAS EMPRESA) Realitza un programa en pl/sql per calcular per a cada client:
+a) El número total de comandes que ha fet.
+b) El número de la comanda amb l&#39;import més petit.
+c) La suma de l&#39;import de totes les seves comandes.
+d) El número de la comanda amb l&#39;import més gran.
+e) La mitjana de línies de comandes del client. */
+declare
+cursor c_comanda(p_client comanda.client_cod%type) is select
+* from comanda where client_cod = p_client;
+cursor c_client is select * from client;
+v_contC int := 0;
+begin
+  for v_client in c_client loop
+    for v_comanda in c_comanda(v_client.client_cod) loop
+      v_contC := v_contC + 1;
+    end loop;
+    dbms_output.put_line('El client ' || v_client.nom ||
+    'ha fet ' || v_contC || ' comandes');
+  end loop;
 end;
