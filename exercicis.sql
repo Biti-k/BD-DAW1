@@ -338,13 +338,40 @@ declare
 cursor c_comanda(p_client comanda.client_cod%type) is select
 * from comanda where client_cod = p_client;
 cursor c_client is select * from client;
-v_contC int := 0;
+cursor c_detall(p_com_num comanda.com_num%type) is select * 
+from detall where p_com_num = com_num;
+v_contC int;
+v_comandaPetita int := 1000;
 begin
   for v_client in c_client loop
+    dbms.output.put_line(v_client.client_cod ||
+    ' ' || v_client.nom);
+    v_contC := 0;
     for v_comanda in c_comanda(v_client.client_cod) loop
       v_contC := v_contC + 1;
+      for v_detall in c_detall(v_comanda.com_num) loop
+        dbms.output.put_line('    ' || v_detall.detall_num ||
+        ' n.Comandes: ' || v_contC);
+      end loop;
+      
     end loop;
-    dbms_output.put_line('El client ' || v_client.nom ||
-    'ha fet ' || v_contC || ' comandes');
+
+  end loop;
+
+end;
+
+/* (CAS SANITAT) Useu un cursor sobre la taula plantilla per:
+ passar a majúscules les dades de la columna FUNCIO
+ convertir a euros el salari (recorda que 1 € = 166,386 ptes.) */
+declare
+  cursor c_plantilla is select * from plantilla for 
+  update of funcio, salari;
+begin
+  for v_plantilla in c_plantilla loop
+    update plantilla set salari = salari / 166.368 where
+    current of c_plantilla;
+
+    update plantilla set funcio = upper(funcio) where
+    current of c_plantilla;
   end loop;
 end;
